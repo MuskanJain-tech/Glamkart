@@ -30,7 +30,6 @@ Glamkart is a full-stack **E-Commerce web application** built using **Python Dja
 
 
 ![Glamkart Home Page](1.png)
-![Glamkart Home Page](2.png)
 ![Glamkart Home Page](3.png)
 
 ## 🚀 Installation
