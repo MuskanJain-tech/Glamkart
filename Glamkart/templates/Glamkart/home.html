@@ -1,0 +1,318 @@
+{% extends "Glamkart/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<style>
+/* ---------- GLOBAL STYLES ---------- */
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(180deg, #f0f7ff, #ffffff);
+    color: #333;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.section, .hero, .gallery-section, .testimonials, .newsletter, .why-glamkart, footer {
+    animation: fadeIn 1s ease;
+}
+
+/* ---------- HERO SECTION ---------- */
+.hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100vh;
+    overflow: hidden;
+    padding: 0 20px;
+}
+
+.hero-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    opacity: 0.45;
+    pointer-events: none;
+    filter: brightness(0.85) saturate(1.2);
+}
+
+.hero::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(to bottom, rgba(240,247,255,0.3), rgba(255,255,255,0.6));
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    background: rgba(255,255,255,0.35);
+    backdrop-filter: blur(15px);
+    border-radius: 25px;
+    padding: 50px 40px;
+    max-width: 800px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    animation: fadeIn 1.5s ease;
+}
+
+.hero-content h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    background: linear-gradient(90deg, #3b5998, #5a8dee, #00bfff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 15px;
+}
+
+.hero-content p {
+    font-size: 1.15em;
+    color: #3b4d6a;
+    line-height: 1.7;
+    margin-bottom: 25px;
+}
+
+.hero-content .btn {
+    display: inline-block;
+    padding: 14px 36px;
+    border-radius: 30px;
+    background: linear-gradient(90deg, #5a8dee, #3b5998);
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.4s ease;
+    box-shadow: 0 5px 14px rgba(90,141,238,0.3);
+}
+.hero-content .btn:hover {
+    background: linear-gradient(90deg, #3b5998, #5a8dee);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(90,141,238,0.45);
+}
+
+/* ---------- SPARKLES ---------- */
+.sparkle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: radial-gradient(circle, rgba(255,255,255,0.9) 40%, transparent 70%);
+    border-radius: 50%;
+    animation: sparkle 3s linear infinite;
+    opacity: 0.8;
+    z-index: 3;
+}
+@keyframes sparkle {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(-80px) rotate(180deg); opacity: 0; }
+}
+
+@media (max-width: 768px) {
+    .hero-content { padding: 30px 25px; }
+}
+
+/* ---------- GALLERY ---------- */
+.gallery-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 60px 20px;
+    justify-items: center;
+    background: linear-gradient(135deg, #e6f4ff, #f9fbff);
+    border-radius: 20px;
+    margin: 60px auto;
+    max-width: 1200px;
+}
+
+.gallery-img,
+.gallery-video {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+    border-radius: 18px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gallery-img:hover,
+.gallery-video:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+/* ---------- PRODUCTS ---------- */
+.section { text-align: center; padding: 60px 20px; }
+.section h2 {
+    font-family: 'Playfair Display', serif;
+    color: #004e89;
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+.products {
+    display: flex;
+    overflow-x: auto;
+    gap: 20px;
+    scroll-behavior: smooth;
+    padding: 10px 0 30px;
+}
+.card {
+    min-width: 250px;
+    background: rgba(255,255,255,0.6);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+}
+.card img {
+    width: 100%;
+    height: 200px;
+    border-radius: 15px;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(90,141,238,0.25);
+}
+
+/* ---------- TESTIMONIALS ---------- */
+.testimonials {
+    background: rgba(255,255,255,0.6);
+    backdrop-filter: blur(10px);
+    padding: 70px 20px;
+    text-align: center;
+    border-radius: 30px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    margin: 60px auto;
+    max-width: 1100px;
+}
+.testimonial-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    margin-top: 30px;
+}
+.testimonial-card {
+    background: rgba(255,255,255,0.5);
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+    transition: all 0.4s ease;
+}
+.testimonial-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 25px rgba(90,141,238,0.25);
+}
+
+/* ---------- FOOTER ---------- */
+footer {
+    background-color: #004e89;
+    color: white;
+    padding: 40px 20px 20px;
+    border-radius: 30px 30px 0 0;
+}
+footer a { color: #cde7ff; text-decoration: none; }
+footer a:hover { text-decoration: underline; }
+footer .social-icons a {
+    font-size: 1.5rem;
+    margin: 0 8px;
+    color: white;
+    transition: color 0.3s ease;
+}
+footer .social-icons a:hover { color: #a0d8ff; }
+footer hr { border: 1px solid rgba(255,255,255,0.2); }
+</style>
+
+<!-- ================= HERO ================= -->
+<div class="hero">
+  <video autoplay muted loop playsinline class="hero-video">
+    <source src="{% static 'videos/hero-bg.mp4' %}" type="video/mp4">
+  </video>
+
+  <div class="sparkle" style="left:10%; animation-delay:0s;"></div>
+  <div class="sparkle" style="left:30%; animation-delay:1s;"></div>
+  <div class="sparkle" style="left:70%; animation-delay:0.5s;"></div>
+
+  <div class="hero-content">
+    <h1>Welcome To <span style="color:#5a8dee;">Glamkart</span></h1>
+    <p>Enter a realm of refined fashion and effortless grace. Discover exclusive collections curated to elevate your confidence and celebrate your individuality.</p>
+    <a href="{% url 'product_list' %}" class="btn">✨ Shop the Look ✨</a>
+  </div>
+</div>
+
+
+<!-- ================= GALLERY ================= -->
+<div class="gallery-section">
+  {% for g in gallery_images %}
+    {% if g.video %}
+      <video class="gallery-video" autoplay muted loop playsinline controls>
+        <source src="{{ g.video.url }}" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    {% elif g.image %}
+      <img src="{{ g.image.url }}" alt="{{ g.title }}" class="gallery-img">
+    {% else %}
+      <p>No media available</p>
+    {% endif %}
+  {% empty %}
+    <p>No gallery items found.</p>
+  {% endfor %}
+</div>
+
+
+<!-- ================= PRODUCTS ================= -->
+<div class="section">
+  <h2>Our Products</h2>
+  <div class="products">
+    {% for product in products %}
+      <div class="card">
+        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        <h3>{{ product.name }}</h3>
+        <p>₹{{ product.price }}</p>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- ================= TESTIMONIALS ================= -->
+<div class="testimonials">
+  <h2>✨ What Our Customers Say ✨</h2>
+  <div class="testimonial-grid">
+    <div class="testimonial-card"><p>“Glamkart has transformed my shopping experience!”</p><h4>Priya Sharma</h4></div>
+    <div class="testimonial-card"><p>“Fast delivery and amazing collection. Love it!”</p><h4>Rohit Mehta</h4></div>
+    <div class="testimonial-card"><p>“Exclusive deals and curated picks, totally worth it!”</p><h4>Anjali Verma</h4></div>
+  </div>
+</div>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="container text-center">
+    <h5>About Glamkart</h5>
+    <p>Premium fashion & lifestyle products curated for elegance and comfort.</p>
+    <div class="social-icons mt-3">
+      <a href="#"><i class="bi bi-facebook"></i></a>
+      <a href="#"><i class="bi bi-instagram"></i></a>
+      <a href="#"><i class="bi bi-twitter"></i></a>
+    </div>
+    <hr>
+    <p class="mb-0">&copy; {{ 2005 }} Glamkart. All Rights Reserved. Muskan jain</p>
+  </div>
+</footer>
+<br>
+
+<script src='https://cdn.jotfor.ms/agent/embedjs/0199d7235cee76fdba1446a31ead2d467540/embed.js'>
+</script>
+{% endblock %}

@@ -1,0 +1,280 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MYSHOP - Home</title>
+  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    /* ---------------------------
+       General Body
+    --------------------------- */
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        background: #e6f7ff;
+        color: #003366;
+        padding-top: 70px;
+    }
+    a { text-decoration: none; color: #007bbf; transition: 0.3s; }
+    a:hover { color: #005a99; }
+
+    /* ---------------------------
+       Navbar
+    --------------------------- */
+    .navbar { box-shadow: 0 4px 12px rgba(0,0,0,0.1); background-color: #004080; }
+    .navbar-brand { font-weight: 700; color: #00c4ff !important; font-size: 1.5rem; }
+    .nav-link { font-weight: 500; transition: color 0.3s; }
+    .nav-link:hover { color: #00e0ff !important; }
+
+    /* ---------------------------
+       Hero Section
+    --------------------------- */
+    .hero {
+        background: linear-gradient(135deg, #00aaff, #80d0ff);
+        color: white;
+        border-radius: 20px;
+        padding: 80px 20px;
+        margin-bottom: 50px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    .hero h1 { font-size: 3rem; font-weight: 700; margin-bottom: 20px; }
+    .hero p { font-size: 1.3rem; margin-bottom: 30px; }
+    .hero .btn-primary {
+        background: #fff; color: #007bbf; font-weight: 600; padding: 12px 30px;
+        border-radius: 50px; transition: all 0.3s;
+    }
+    .hero .btn-primary:hover { background: #007bbf; color: #fff; box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+
+    /* ---------------------------
+       Product Cards
+    --------------------------- */
+    .product-card {
+        background: white;
+        border-radius: 20px;
+        padding: 20px;
+        margin-bottom: 30px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        transition: transform 0.3s, box-shadow 0.3s;
+        position: relative;
+        text-align: center;
+    }
+    .product-card:hover { transform: translateY(-5px); box-shadow: 0 12px 35px rgba(0,0,0,0.15); }
+    .product-card img { border-radius: 15px; height: 200px; object-fit: cover; }
+    .product-card h5 { margin-top: 15px; font-weight: 600; color: #004080; }
+    .product-card p { font-size: 1.1rem; font-weight: 500; color: #007bbf; }
+    .badge-new { position: absolute; top: 15px; left: 15px; background: #00c4ff; color: white; padding: 5px 12px; border-radius: 50px; font-size: 0.8rem; font-weight: 600; }
+
+    /* ---------------------------
+       Reviews
+    --------------------------- */
+    .review-card {
+        background: white;
+        border-left: 5px solid #00aaff;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+        transition: transform 0.3s;
+    }
+    .review-card:hover { transform: translateY(-3px); }
+    .rating { color: #f39c12; font-size: 1.1rem; margin-bottom: 10px; }
+
+    .review-form {
+        background: white;
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+    }
+    .review-form .form-control {
+        border-radius: 10px;
+        box-shadow: none;
+        border: 1px solid #ced4da;
+        transition: all 0.3s;
+    }
+    .review-form .form-control:focus { border-color: #00aaff; box-shadow: 0 0 5px rgba(0,170,255,0.3); }
+
+    /* ---------------------------
+       Footer
+    --------------------------- */
+    footer {
+        background: linear-gradient(135deg, #004080, #007bbf);
+        color: #ffffff;
+        padding: 60px 0 30px 0;
+        font-family: 'Segoe UI', sans-serif;
+    }
+    footer h5 { font-weight: 700; margin-bottom: 20px; }
+    footer p, footer li, footer a { font-size: 0.95rem; color: #ffffff; transition: color 0.3s ease, transform 0.3s ease; }
+    footer a:hover { color: #00e0ff; text-decoration: none; }
+    footer .social-icons a {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px; border-radius: 50%;
+      background: rgba(255,255,255,0.2); color: #ffffff; margin-right: 10px;
+      transition: all 0.3s ease; font-size: 1.2rem;
+    }
+    footer .social-icons a:hover { background: #00aaff; transform: scale(1.2); color: #fff; }
+    footer hr { border-top: 1px solid rgba(255,255,255,0.3); margin: 30px 0; }
+
+    @media (max-width: 767px) {
+      footer .col-md-4 { margin-bottom: 30px; text-align: center; }
+      footer .social-icons a { margin-right: 12px; margin-bottom: 10px; }
+    }
+
+    .container { padding-top: 30px; padding-bottom: 30px; }
+
+    .btn-primary { border-radius: 50px; font-weight: 500; transition: all 0.3s; }
+    .btn-primary:hover { background: #005a99; box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top shadow-sm">
+    <div class="container">
+      <a class="navbar-brand" href="#home">MYSHOP</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#products">Products</a></li>
+          <li class="nav-item"><a class="nav-link" href="#reviews">Reviews</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section id="home" class="hero">
+    <h1>Welcome to MYSHOP</h1>
+    <p>Discover the best products online at amazing prices!</p>
+    <a href="#products" class="btn btn-primary btn-lg">Shop Now</a>
+  </section>
+
+  <!-- Products Section -->
+  <section id="products" class="container mb-5">
+    <h2 class="mb-4 text-center">Our Products</h2>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="product-card">
+          <span class="badge-new">New</span>
+          <img src="{% static 'images/product1.jpg' %}" alt="Product 1">
+          <h5 class="mt-3">Product 1</h5>
+          <p>$29.99</p>
+          <button class="btn btn-primary">Add to Cart</button>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="product-card">
+          <span class="badge-new">20% OFF</span>
+          <img src="{% static 'images/product2.jpg' %}" alt="Product 2">
+          <h5 class="mt-3">Product 2</h5>
+          <p>$39.99</p>
+          <button class="btn btn-primary">Add to Cart</button>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="product-card">
+          <img src="{% static 'images/product3.jpg' %}" alt="Product 3">
+          <h5 class="mt-3">Product 3</h5>
+          <p>$49.99</p>
+          <button class="btn btn-primary">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reviews Section -->
+  <section id="reviews" class="container mb-5">
+    <h2 class="mb-4 text-center">Customer Reviews</h2>
+
+    {% for review in reviews %}
+    <div class="review-card">
+      <div class="d-flex justify-content-between">
+        <h5>{{ review.user.username }}</h5>
+        <span class="text-muted">{{ review.created_at|date:"M d, Y" }}</span>
+      </div>
+      <p class="rating">
+        {% for i in "12345" %}
+          {% if forloop.counter <= review.rating %}★{% else %}☆{% endif %}
+        {% endfor %}
+      </p>
+      <p>{{ review.comment }}</p>
+    </div>
+    {% empty %}
+    <p class="text-muted text-center">No reviews yet. Be the first to review!</p>
+    {% endfor %}
+
+    <!-- Add Review Form -->
+    <div class="review-form mt-4">
+      <h4>Write a Review</h4>
+      <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="rating" class="form-label">Rating</label>
+          <select name="rating" id="rating" class="form-select" required>
+            <option value="">Select...</option>
+            <option value="5">★★★★★ - Excellent</option>
+            <option value="4">★★★★☆ - Good</option>
+            <option value="3">★★★☆☆ - Average</option>
+            <option value="2">★★☆☆☆ - Poor</option>
+            <option value="1">★☆☆☆☆ - Terrible</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="comment" class="form-label">Comment</label>
+          <textarea name="comment" id="comment" rows="3" class="form-control" placeholder="Write your review..." required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit Review</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="container text-center mb-5">
+    <h2>Contact Us</h2>
+    <p>Email: support@myshop.com | Phone: +91 123 456 7890</p>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <h5>About MYSHOP</h5>
+          <p>Quality products at best prices. Shop online with confidence.</p>
+        </div>
+        <div class="col-md-4">
+          <h5>Quick Links</h5>
+          <ul class="list-unstyled">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#products">Products</a></li>
+            <li><a href="#reviews">Reviews</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <h5>Follow Us</h5>
+          <div class="social-icons mt-2">
+            <a href="#"><i class="bi bi-facebook"></i></a>
+            <a href="#"><i class="bi bi-instagram"></i></a>
+            <a href="#"><i class="bi bi-twitter"></i></a>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <p class="text-center mb-0">&copy; {{ current_year }} MYSHOP. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

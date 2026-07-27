@@ -1,0 +1,382 @@
+{% extends "Glamkart/base.html" %}
+{% block content %}
+{% load static %}
+
+<style>
+  /* ---------- GLOBAL ---------- */
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #e7f6f4, #ffffff);
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+  }
+
+  /* Floating pastel circles */
+  .floating-bg span {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle at top left, #b2e0dd 0%, #d0e9e6 80%);
+    animation: float 6s ease-in-out infinite alternate;
+    opacity: 0.3;
+    z-index: 0;
+  }
+
+  .floating-bg span:nth-child(1) { width: 150px; height: 150px; top: 50px; left: 80px; animation-delay: 0s; }
+  .floating-bg span:nth-child(2) { width: 200px; height: 200px; top: 400px; right: 100px; animation-delay: 2s; }
+  .floating-bg span:nth-child(3) { width: 120px; height: 120px; bottom: 60px; left: 150px; animation-delay: 4s; }
+
+  @keyframes float {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(30px); }
+  }
+
+  /* ---------- CONTAINER ---------- */
+  .about-container {
+    position: relative;
+    max-width: 1200px;
+    margin: 4rem auto;
+    padding: 3.5rem 2.5rem;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 25px;
+    backdrop-filter: blur(18px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+    z-index: 2;
+    animation: fadeUp 1s ease-in-out;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ---------- HEADER ---------- */
+  .about-title {
+    text-align: center;
+    font-size: 3.2rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    background: linear-gradient(90deg, #3aaed8, #79c8de, #b3ecf2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 20px rgba(108,180,238,0.3);
+  }
+
+  .about-subtitle {
+    text-align: center;
+    font-size: 1.25rem;
+    color: #444;
+    margin-bottom: 3rem;
+    line-height: 1.7;
+    max-width: 850px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* ---------- ABOUT SECTION ---------- */
+  .about-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .about-img {
+    width: 10%;
+    border-radius: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
+  }
+
+  .about-img:hover {
+    transform: scale(1.04) rotate(-1deg);
+    box-shadow: 0 15px 45px rgba(0,0,0,0.18);
+  }
+
+  .about-text h3 {
+    font-size: 2rem;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+
+  .about-text h3::after {
+    content: '';
+    width: 70px;
+    height: 4px;
+    background: linear-gradient(90deg, #6cb4ee, #b3ecf2);
+    display: block;
+    margin-top: 8px;
+    border-radius: 2px;
+  }
+
+  .about-text p {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.8;
+    margin-bottom: 1.2rem;
+  }
+
+  /* ---------- INFO BOX ---------- */
+  .info-box {
+    margin-top: 2.5rem;
+    padding: 2rem;
+    background: linear-gradient(120deg, rgba(240, 249, 255, 0.95), rgba(255,255,255,0.95));
+    border-left: 6px solid #6cb4ee;
+    border-radius: 20px;
+    color: #333;
+    line-height: 1.7;
+    transition: 0.4s;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .info-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #6cb4ee, #a7dff4, #c2f1ef);
+  }
+
+  .info-box:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+  }
+
+  .info-box strong {
+    color: #2b7ddf;
+  }
+
+  /* ---------- VALUES ---------- */
+  .values-section {
+    margin-top: 3.5rem;
+  }
+
+  .values-section h3 {
+    text-align: center;
+    font-size: 1.9rem;
+    color: #2c3e50;
+    margin-bottom: 2rem;
+  }
+
+  .values-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 2.5rem;
+  }
+
+  .value-card {
+    background: rgba(255,255,255,0.8);
+    border-radius: 20px;
+    text-align: center;
+    padding: 2rem 1.5rem;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .value-card:hover {
+    transform: translateY(-6px) scale(1.03);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+  }
+
+  .value-card img {
+    width: 58px;
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 0 8px rgba(108,180,238,0.4));
+  }
+
+  .value-card h4 {
+    font-size: 1.2rem;
+    color: #2c3e50;
+    margin-bottom: 0.6rem;
+  }
+
+  .value-card p {
+    font-size: 0.95rem;
+    color: #555;
+    line-height: 1.5;
+  }
+
+  /* ---------- TEAM ---------- */
+  .team-section {
+    margin-top: 4rem;
+  }
+
+  .team-section h3 {
+    text-align: center;
+    font-size: 2rem;
+    color: #2c3e50;
+    margin-bottom: 2.5rem;
+  }
+
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 2.5rem;
+    justify-items: center;
+  }
+
+  .team-member {
+    text-align: center;
+    background: rgba(255,255,255,0.85);
+    padding: 1.8rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    transition: 0.4s;
+    max-width: 280px;
+  }
+
+  .team-member:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+  }
+
+  .team-member img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 0.8rem;
+    border: 4px solid #c2f1ef;
+  }
+
+  .team-member h5 {
+    font-size: 1.15rem;
+    color: #2c3e50;
+    margin-bottom: 0.3rem;
+  }
+
+  .team-member p {
+    font-size: 0.9rem;
+    color: #555;
+  }
+
+  @media (max-width: 768px) {
+    .about-title { font-size: 2.3rem; }
+    .about-container { padding: 2rem 1.2rem; }
+  }
+</style>
+
+<div class="floating-bg">
+  <span></span>
+  <span></span>
+  <span></span>
+</div>
+
+<div class="about-container">
+  <h1 class="about-title">About Us ✨</h1>
+  <p class="about-subtitle">
+    Welcome to <strong>MYSHOP</strong>  where fashion meets technology, and shopping feels effortless.  
+    Created by <strong>Glamkart</strong>, our platform blends design, trust, and innovation to redefine your online experience.
+  </p>
+
+ <div class="about-grid">
+  <div>
+    <img src="{% static 'image/Glamkartlogo.jpg' %}" class="about-img" alt="About MyShop">
+  </div>
+</div>
+
+
+    <div class="about-text">
+      <h3>Who We Are</h3>
+      <p>At <strong>MYSHOP</strong>, we believe shopping should be joyful, smart, and stylish. We curate an exclusive range of products -from lifestyle to electronics - making premium accessible to everyone.</p>
+      <p>Powered by <strong>Glamkart</strong> and built on the latest web technologies, we ensure every click, every checkout, and every delivery feels seamless and secure.</p>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <p><strong>Our Mission:</strong> To create a seamless online marketplace that connects people to the products they love — with quality, trust, and innovation at its core.</p>
+  </div>
+
+  <div class="info-box">
+    <p><strong>Our Vision:</strong> To lead the digital shopping revolution, empowering customers with smarter choices, ethical products, and memorable experiences.</p>
+  </div>
+
+  <div class="values-section">
+    <h3>Our Core Values 🌿</h3>
+    <div class="values-grid">
+      <div class="value-card">
+        <img src="https://img.icons8.com/color/48/quality--v1.png" alt="Quality">
+        <h4>Quality First</h4>
+        <p>We handpick every product to ensure it meets global quality standards.</p>
+      </div>
+      <div class="value-card">
+        <img src="https://img.icons8.com/color/48/cheap-price.png" alt="Affordable">
+        <h4>Affordable Luxury</h4>
+        <p>Enjoy top-tier products at prices that make sense — luxury made simple.</p>
+      </div>
+      <div class="value-card">
+        <img src="https://img.icons8.com/color/48/trust.png" alt="Trust">
+        <h4>Built on Trust</h4>
+        <p>Your privacy and data are safeguarded by enterprise-grade protection.</p>
+      </div>
+      <div class="value-card">
+        <img src="https://img.icons8.com/color/48/helping-hand.png" alt="Support">
+        <h4>Always Here</h4>
+        <p>Round-the-clock customer support that listens and solves instantly.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="team-section">
+    <h3>Meet Our Team 💼</h3>
+    <div class="team-grid">
+      <div class="team-member">
+        <img src="https://source.unsplash.com/120x120/?woman,business" alt="CEO">
+        <h5>Muskan Jain</h5>
+        <p>Founder & CEO</p>
+      </div>
+      <div class="team-member">
+        <img src="https://source.unsplash.com/120x120/?man,developer" alt="CTO">
+        <h5>Muskan Jain</h5>
+        <p>Chief Technology Officer</p>
+      </div>
+      <div class="team-member">
+        <img src="https://source.unsplash.com/120x120/?woman,designer" alt="Designer">
+        <h5>Muskan Jain</h5>
+        <p>Creative Director</p>
+      </div>
+      <div class="team-member">
+        <img src="https://source.unsplash.com/120x120/?man,marketing" alt="Marketing">
+        <h5>Muskan Jain</h5>
+        <p>Marketing Head</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box" style="margin-top: 3rem;">
+    <p><strong>Our Promise:</strong> Every order, every message, every moment  crafted with care.  
+    We don’t just deliver products; we deliver happiness, one parcel at a time.</p>
+  </div>
+</div>
+
+<script>
+  // Scroll animation reveal
+  document.addEventListener("scroll", () => {
+    document.querySelectorAll('.value-card, .team-member, .info-box').forEach(el => {
+      const rect = el.getBoundingClientRect().top;
+      const windowHeight = window.innerHeight;
+      if (rect < windowHeight - 100) {
+        el.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease';
+        el.style.opacity = 1;
+        el.style.transform = 'translateY(0)';
+      } else {
+        el.style.opacity = 0;
+        el.style.transform = 'translateY(40px)';
+      }
+    });
+  });
+</script>
+ <p class="mb-0">&copy; {{ 2005 }} Glamkart. All Rights Reserved. Muskan jain</p>
+
+
+<script src='https://cdn.jotfor.ms/agent/embedjs/0199d7235cee76fdba1446a31ead2d467540/embed.js'>
+</script>
+{% endblock %}
+

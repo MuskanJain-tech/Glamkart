@@ -1,0 +1,237 @@
+{% extends "Glamkart/base.html" %}
+{% block content %}
+
+<style>
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #d0e9e6, #f0f9ff);
+    min-height: 100vh;
+  }
+
+  .cart-container {
+    max-width: 1100px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    backdrop-filter: blur(12px);
+    animation: fadeIn 1s ease;
+  }
+
+  .cart-container h2 {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    background: linear-gradient(90deg, #6cb4ee, #95d4f0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+    table-layout: fixed;
+  }
+
+  thead {
+    background: linear-gradient(90deg, #6cb4ee, #95d4f0);
+    color: white;
+  }
+
+  thead th {
+    padding: 1rem;
+    text-align: left;
+  }
+
+  tbody tr {
+    background: rgba(255, 255, 255, 0.65);
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  tbody tr:hover {
+    background: #f0f9ff;
+    transform: scale(1.01);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+
+  tbody td {
+    padding: 1rem;
+    border-bottom: 1px solid #e0e0e0;
+    vertical-align: middle;
+    word-wrap: break-word;
+  }
+
+  .product-img {
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    object-fit: cover;
+  }
+
+  .qty-input {
+    width: 60px;
+    padding: 0.4rem;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.3s;
+  }
+
+  .qty-input:focus {
+    border-color: #6cb4ee;
+    box-shadow: 0 0 6px rgba(108,180,238,0.5);
+    transform: scale(1.05);
+  }
+
+  .btn-remove {
+    background: linear-gradient(90deg, #e74c3c, #c0392b);
+    color: white;
+    border: none;
+    padding: 0.5rem 0.9rem;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.3s;
+  }
+
+  .btn-remove:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+
+  .cart-summary {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: rgba(240, 249, 255, 0.85);
+    border-radius: 15px;
+    text-align: right;
+    font-size: 1.1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .cart-summary strong {
+    font-size: 1.3rem;
+    color: #2c3e50;
+  }
+
+  .checkout-btn {
+    margin-top: 0.5rem;
+    margin-left: 0.5rem;
+    background: linear-gradient(90deg, #6cb4ee, #95d4f0);
+    color: white;
+    padding: 0.9rem 1.5rem;
+    font-weight: 600;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 1rem;
+  }
+
+  .checkout-btn:hover {
+    background: linear-gradient(90deg, #4a9fd6, #6cb4ee);
+    transform: scale(1.05);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Responsive for mobile */
+  @media (max-width: 768px) {
+    table, thead, tbody, th, td, tr { display: block; }
+    thead tr { display: none; }
+    tbody tr { margin-bottom: 1rem; }
+    tbody td {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.8rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    tbody td::before {
+      content: attr(data-label);
+      font-weight: 600;
+      color: #3a6ea5;
+    }
+    .cart-summary {
+      flex-direction: column;
+      align-items: flex-end;
+    }
+  }
+</style>
+
+<div class="cart-container">
+  <h2>Your Shopping Cart 🛒</h2>
+
+  {% if cart_items %}
+  <form method="POST" action="{% url 'update_cart' %}">
+    {% csrf_token %}
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Image</th>
+          <th>Product</th>
+          <th>Price</th>
+          <th>Quantity</th>
+          <th>Total</th>
+          <th>Remove</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in cart_items %}
+        <tr>
+          <td data-label="#"> {{ forloop.counter }} </td>
+          <td data-label="Image">
+            {% if item.product.image %}
+              <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="product-img">
+            {% else %}
+              <span>No Image</span>
+            {% endif %}
+          </td>
+          <td data-label="Product"> {{ item.product.name }} </td>
+          <td data-label="Price"> ₹{{ item.product.price }} </td>
+          <td data-label="Quantity">
+            <input type="number" name="quantity_{{ item.id }}" value="{{ item.quantity }}" min="1" class="qty-input">
+          </td>
+          <td data-label="Total"> ₹{{ item.get_total_price }} </td>
+          <td data-label="Remove">
+            <form method="POST" action="{% url 'remove_from_cart' item.id %}">
+              {% csrf_token %}
+              <button class="btn-remove">🗑️</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="cart-summary">
+      <strong>Grand Total: ₹{{ cart_total }}</strong>
+      <div>
+        <button type="submit" class="checkout-btn">Update Cart</button>
+        <a href="{% url 'checkout' %}">
+          <button type="button" class="checkout-btn">Proceed to Checkout →</button>
+        </a>
+      </div>
+    </div>
+  </form>
+  {% else %}
+    <p style="text-align:center; padding:1.5rem;">Your cart is empty 🛍️</p>
+  {% endif %}
+</div>
+<script src='https://cdn.jotfor.ms/agent/embedjs/0199d7235cee76fdba1446a31ead2d467540/embed.js'>
+</script>
+
+{% endblock %}

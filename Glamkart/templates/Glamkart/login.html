@@ -1,0 +1,278 @@
+{% extends "Glamkart/base.html" %}
+{% block content %}
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #e0f2f1, #f8fdff);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Floating bubbles */
+  .bubble {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(108, 180, 238, 0.18);
+    animation: float linear infinite;
+    opacity: 0.5;
+    filter: blur(1px);
+    z-index: 1;
+  }
+
+  @keyframes float {
+    0% { transform: translateY(100vh) scale(0.6) rotate(0deg); opacity: 0.3; }
+    50% { opacity: 0.6; }
+    100% { transform: translateY(-10vh) scale(1) rotate(360deg); opacity: 0; }
+  }
+
+  /* Login card */
+  .login-container {
+    position: relative;
+    width: 420px;
+    max-width: 95%;
+    padding: 3rem 2.5rem;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+    text-align: center;
+    z-index: 10;
+    animation: fadeIn 1.2s ease forwards;
+    margin: 0;
+  }
+
+  .login-container h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(90deg, #4a9edc, #6cb4ee);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: textFade 1.5s ease forwards;
+  }
+
+  @keyframes textFade {
+    0% { opacity: 0; transform: translateY(-10px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+  }
+
+  .form-group label {
+    font-size: 0.9rem;
+    color: #305a85;
+    font-weight: 500;
+    display: block;
+    margin-bottom: 0.4rem;
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 0.9rem 1rem;
+    border: 1px solid #dce8f7;
+    border-radius: 12px;
+    background: #f8fbff;
+    font-size: 0.95rem;
+    outline: none;
+    transition: all 0.3s ease;
+  }
+
+  .form-group input:focus {
+    border-color: #6cb4ee;
+    box-shadow: 0 0 10px rgba(108, 180, 238, 0.35);
+    transform: scale(1.02);
+  }
+
+  .password-toggle {
+    position: relative;
+  }
+
+  .password-toggle i {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 1rem;
+    color: #3a6ea5;
+    transition: all 0.3s;
+  }
+
+  .password-toggle i:hover {
+    color: #1e4d80;
+    transform: scale(1.2) translateY(-50%);
+  }
+
+  .btn-login {
+    width: 100%;
+    padding: 1rem;
+    border: none;
+    border-radius: 40px;
+    background: linear-gradient(135deg, #4a9edc, #6cb4ee);
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.35s ease;
+    box-shadow: 0 6px 15px rgba(108, 180, 238, 0.25);
+  }
+
+  .btn-login:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 25px rgba(108, 180, 238, 0.35);
+  }
+
+  .extra-links {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+  }
+
+  .extra-links a {
+    color: #3a6ea5;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s;
+  }
+
+  .extra-links a:hover {
+    text-decoration: underline;
+    color: #1e4d80;
+  }
+
+  /* Social login */
+  .social-login {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 1.2rem 0 1.6rem;
+  }
+
+  .social-login button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1.2rem;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  }
+
+  .social-login button i {
+    font-size: 1.1rem;
+  }
+
+  .social-login button.google {
+    background: #fff;
+    color: #555;
+    border: 1px solid #ddd;
+  }
+
+  .social-login button.google:hover {
+    background: #f5f5f5;
+    transform: scale(1.05);
+  }
+
+  .social-login button.facebook {
+    background: #1877f2;
+    color: #fff;
+  }
+
+  .social-login button.facebook:hover {
+    background: #145dbf;
+    transform: scale(1.05);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(25px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 500px) {
+    .login-container {
+      width: 90%;
+      padding: 2rem 1.5rem;
+    }
+  }
+
+  @media (max-height: 600px) {
+    body {
+      align-items: flex-start;
+      padding-top: 20px;
+    }
+  }
+</style>
+
+<!-- Floating bubbles -->
+<div class="bubble" style="width: 50px; height:50px; left:10%; animation-duration:13s;"></div>
+<div class="bubble" style="width: 80px; height:80px; left:70%; animation-duration:18s;"></div>
+<div class="bubble" style="width: 35px; height:35px; left:50%; animation-duration:10s;"></div>
+<div class="bubble" style="width: 65px; height:65px; left:30%; animation-duration:15s;"></div>
+<div class="bubble" style="width: 40px; height:40px; left:85%; animation-duration:12s;"></div>
+<div class="bubble" style="width: 55px; height:55px; left:20%; animation-duration:20s;"></div>
+
+<!-- Login Box -->
+<div class="login-container">
+  <h2>Welcome Back 👋</h2>
+
+  <!-- Social login -->
+  <div class="social-login">
+    <button class="google"><i class="fab fa-google"></i> Google</button>
+    <button class="facebook"><i class="fab fa-facebook-f"></i> Facebook</button>
+  </div>
+
+  <form method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="username">Username or Email</label>
+      <input type="text" id="username" name="username" placeholder="Enter your username" required>
+    </div>
+
+    <div class="form-group password-toggle">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="Enter your password" required>
+      <i class="fas fa-eye" id="togglePassword"></i>
+    </div>
+
+    <button type="submit" class="btn-login">Login</button>
+  </form>
+
+  <div class="extra-links">
+    <a href="{% url 'forgot' %}">Forgot Password?</a>
+    <a href="{% url 'register' %}">Create Account</a>
+  </div>
+</div>
+
+<!-- Font Awesome -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js" crossorigin="anonymous"></script>
+
+<script>
+  const togglePassword = document.getElementById('togglePassword');
+  const passwordInput = document.getElementById('password');
+  togglePassword.addEventListener('click', () => {
+    const type = passwordInput.type === 'password' ? 'text' : 'password';
+    passwordInput.type = type;
+    togglePassword.classList.toggle('fa-eye-slash');
+  });
+</script>
+
+{% endblock %}

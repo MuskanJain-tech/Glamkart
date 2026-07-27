@@ -1,0 +1,132 @@
+{% extends "Glamkart/base.html" %}
+{% block content %}
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #d0e9e6, #f0f9ff);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Floating bubbles */
+  .bubble {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(108, 180, 238, 0.25);
+    animation: float 10s infinite;
+    opacity: 0.5;
+    z-index: 1;
+  }
+
+  @keyframes float {
+    0% { transform: translateY(100vh) scale(0.5); opacity: 0.3; }
+    50% { opacity: 0.6; }
+    100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+  }
+
+  /* Glassmorphism Logout Box */
+  .logout-container {
+    position: relative;
+    width: 400px;
+    padding: 2.5rem 2rem;
+    border-radius: 25px;
+    background: rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+    text-align: center;
+    z-index: 5;
+    animation: fadeIn 1s ease;
+  }
+
+  .logout-container h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    background: linear-gradient(90deg, #6cb4ee, #95d4f0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .logout-container p {
+    font-size: 1rem;
+    color: #3a6ea5;
+    margin-bottom: 2rem;
+  }
+
+  .btn-logout {
+    width: 100%;
+    padding: 1rem;
+    border: none;
+    border-radius: 50px;
+    background: linear-gradient(90deg, #6cb4ee, #95d4f0);
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .btn-logout:hover {
+    background: linear-gradient(90deg, #4a9edc, #6cb4ee);
+    transform: translateY(-3px);
+  }
+
+  .extra-links {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+  }
+
+  .extra-links a {
+    color: #3a6ea5;
+    text-decoration: none;
+    font-weight: 500;
+    margin: 0 5px;
+    transition: 0.3s;
+  }
+
+  .extra-links a:hover {
+    text-decoration: underline;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 480px) {
+    .logout-container {
+      width: 90%;
+      padding: 2rem 1.5rem;
+    }
+  }
+</style>
+
+<!-- Floating bubbles -->
+<div class="bubble" style="width: 50px; height:50px; left:10%; animation-duration:12s;"></div>
+<div class="bubble" style="width: 80px; height:80px; left:70%; animation-duration:18s;"></div>
+<div class="bubble" style="width: 30px; height:30px; left:50%; animation-duration:10s;"></div>
+<div class="bubble" style="width: 60px; height:60px; left:30%; animation-duration:14s;"></div>
+
+<!-- Logout Box -->
+<div class="logout-container">
+  <h2>See You Soon 👋</h2>
+  <p>You have been successfully logged out.</p>
+
+  <a href="{% url 'login' %}" class="btn-logout" style="display:inline-block; text-decoration:none;">Login Again</a>
+
+  <div class="extra-links">
+    <a href="/">Go to Home</a>
+  </div>
+</div>
+
+{% endblock %}

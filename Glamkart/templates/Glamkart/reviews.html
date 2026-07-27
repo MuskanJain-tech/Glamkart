@@ -1,0 +1,150 @@
+{% extends "Glamkart/base.html" %}
+
+{% block content %}
+{% load static %}
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+  body {
+    background: linear-gradient(135deg, #cfd9df 0%, #e2ebf0 100%);
+    font-family: "Segoe UI", sans-serif;
+  }
+
+  /* Glassmorphism effect */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  .review-card {
+    @extend .glass-card;
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .review-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+  }
+
+  .review-card h5 {
+    font-weight: 600;
+    color: #0d47a1;
+  }
+  .review-date {
+    font-size: 0.85rem;
+    color: #4f6f91;
+  }
+  .rating {
+    color: #ffb400;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+  }
+
+  .review-form {
+    @extend .glass-card;
+    padding: 30px;
+    margin-top: 40px;
+  }
+  .review-form h4 {
+    color: #0d47a1;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+
+  .form-label {
+    font-weight: 600;
+    color: #1a2a4f;
+  }
+
+  .form-control, .form-select {
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 10px;
+    padding: 10px;
+  }
+  .form-control:focus, .form-select:focus {
+    outline: none;
+    border-color: #5a8dee;
+    box-shadow: 0 0 8px rgba(90, 141, 238, 0.4);
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #5a8dee, #3a6edc);
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    transition: background 0.3s ease, transform 0.2s ease;
+  }
+  .btn-primary:hover {
+    background: linear-gradient(135deg, #3a6edc, #1c4db0);
+    transform: translateY(-2px);
+  }
+
+  h2 {
+    color: #0d47a1;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+</style>
+
+<div class="container my-5">
+
+  <!-- Reviews Section -->
+  <h2 class="mb-4 text-center">💬 Customer Reviews</h2>
+
+  {% for review in reviews %}
+  <div class="review-card glass-card">
+    <div class="d-flex justify-content-between">
+      <h5>{{ review.user.username }}</h5>
+      <span class="review-date">{{ review.created_at|date:"M d, Y" }}</span>
+    </div>
+    <p class="rating">
+      {% for i in "12345" %}
+        {% if forloop.counter <= review.rating %}
+          ★
+        {% else %}
+          ☆
+        {% endif %}
+      {% endfor %}
+    </p>
+    <p>{{ review.comment }}</p>
+  </div>
+  {% empty %}
+  <p class="text-muted text-center">No reviews yet. Be the first to review!</p>
+  {% endfor %}
+
+  <!-- Add Review Form -->
+  <div class="review-form glass-card">
+    <h4>✍️ Write a Review</h4>
+    <form method="POST">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="rating" class="form-label">Rating</label>
+        <select name="rating" id="rating" class="form-select" required>
+          <option value="">Select...</option>
+          <option value="5">★★★★★ - Excellent</option>
+          <option value="4">★★★★☆ - Good</option>
+          <option value="3">★★★☆☆ - Average</option>
+          <option value="2">★★☆☆☆ - Poor</option>
+          <option value="1">★☆☆☆☆ - Terrible</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="comment" class="form-label">Comment</label>
+        <textarea name="comment" id="comment" rows="4" class="form-control" placeholder="Write your review..." required></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Submit Review</button>
+    </form>
+  </div>
+
+</div>
+
+{% endblock %}

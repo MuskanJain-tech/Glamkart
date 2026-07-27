@@ -1,0 +1,198 @@
+{% extends "Glamkart/base.html" %}
+{% load static %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Wishlist</title>
+    <style>
+        /* Reset & basic styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #f0f8ff; /* light blue background */
+            color: #003366;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 50px 20px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 50px;
+            color: #004080;
+            font-size: 2.8rem;
+        }
+
+        /* Wishlist Grid */
+        .wishlist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        /* Wishlist Card */
+        .wishlist-card {
+            background: #ffffff;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .wishlist-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .wishlist-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .wishlist-content {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .wishlist-content h3 {
+            font-size: 1.3rem;
+            color: #004080;
+            margin-bottom: 10px;
+        }
+
+        .wishlist-content p.price {
+            font-size: 1.1rem;
+            color: #0073e6;
+            margin-bottom: 10px;
+        }
+
+        .wishlist-content p.stock {
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+
+        .in-stock {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .out-of-stock {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .wishlist-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .wishlist-buttons button {
+            flex: 1;
+            padding: 10px 0;
+            border: none;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .wishlist-buttons button:hover {
+            transform: scale(1.05);
+        }
+
+        .add-to-cart {
+            background: #0073e6;
+            color: #fff;
+        }
+
+        .add-to-cart:hover {
+            background: #0059b3;
+        }
+
+        .remove {
+            background: #e60000;
+            color: #fff;
+        }
+
+        .remove:hover {
+            background: #b30000;
+        }
+
+        /* Empty Wishlist */
+        .empty-message {
+            text-align: center;
+            font-size: 1.5rem;
+            color: #004080;
+            margin-top: 100px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .wishlist-card img {
+                height: 180px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h2 {
+                font-size: 2rem;
+            }
+
+            .wishlist-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="container">
+        <h2>💙 My Wishlist</h2>
+
+        {% if wishlist_items %}
+        <div class="wishlist-grid">
+            {% for item in wishlist_items %}
+            <div class="wishlist-card">
+                <img src="{{ item.image.url }}" alt="{{ item.name }}">
+                <div class="wishlist-content">
+                    <h3>{{ item.name }}</h3>
+                    <p class="price">${{ item.price }}</p>
+                    {% if item.in_stock %}
+                        <p class="stock in-stock">In Stock</p>
+                    {% else %}
+                        <p class="stock out-of-stock">Out of Stock</p>
+                    {% endif %}
+                    <div class="wishlist-buttons">
+                        <button class="add-to-cart">Add to Cart</button>
+                        <button class="remove">Remove</button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="empty-message">Your wishlist is empty 😔</p>
+        {% endif %}
+    </section>
+</body>
+</html>
+<script src='https://cdn.jotfor.ms/agent/embedjs/0199d7235cee76fdba1446a31ead2d467540/embed.js'>
+</script>
+{% endblock %}

@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+  body {
+    background: linear-gradient(135deg, #d0f0f3, #fff);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .success-box {
+    max-width: 600px;
+    width: 100%;
+    background: #fff;
+    padding: 50px 40px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+    animation: fadeInUp 0.8s ease-in-out;
+    position: relative;
+    z-index: 1;
+  }
+  .checkmark {
+    font-size: 80px;
+    color: #28a7a7;
+    animation: pop 0.6s ease-in-out;
+  }
+  .success-box h2 {
+    color: #28a7a7;
+    margin: 20px 0 10px;
+    font-weight: 600;
+  }
+  .success-box p {
+    color: #555;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+  }
+  .order-details {
+    background: #f7fdfd;
+    border: 1px solid #e0f7fa;
+    border-radius: 12px;
+    padding: 15px;
+    margin: 20px 0;
+  }
+  .order-details p {
+    margin: 5px 0;
+    font-size: 1rem;
+  }
+  .btn-home {
+    margin-top: 20px;
+    background: linear-gradient(135deg, #ff6fa9, #ff4081);
+    color: white;
+    border-radius: 30px;
+    padding: 12px 28px;
+    font-size: 1rem;
+    border: none;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-home:hover {
+    background: linear-gradient(135deg, #e91e63, #d81b60);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(233,30,99,0.3);
+  }
+  .confetti {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+  }
+  .confetti span {
+    position: absolute;
+    width: 10px; height: 10px;
+    background: #ff4081;
+    opacity: 0.8;
+    animation: fall 3s linear infinite;
+  }
+  .confetti span:nth-child(2) { background: #28a7a7; left: 20%; animation-delay: 0.5s; }
+  .confetti span:nth-child(3) { background: #ffc107; left: 40%; animation-delay: 1s; }
+  .confetti span:nth-child(4) { background: #03a9f4; left: 60%; animation-delay: 1.5s; }
+  .confetti span:nth-child(5) { background: #8e24aa; left: 80%; animation-delay: 2s; }
+
+  @keyframes pop {
+    0% { transform: scale(0.3); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  @keyframes fadeInUp {
+    0% { transform: translateY(40px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+  }
+  @keyframes fall {
+    0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+  }
+</style>
+
+<div class="confetti">
+  <span></span><span></span><span></span><span></span><span></span>
+</div>
+
+<div class="success-box">
+  <div class="checkmark"><i class="fas fa-check-circle"></i></div>
+  <h2>Payment Successful!</h2>
+  <p>Thank you <b>{{ user.username }}</b> 🎉</p>
+
+  <div class="order-details">
+    <p><i class="fas fa-money-bill-wave"></i> Amount: <b>₹{{ order.total_price }}</b></p>
+    <p><i class="fas fa-receipt"></i> Order ID: <b>#{{ order.id }}</b></p>
+    <p><i class="fas fa-envelope"></i> A confirmation email will be sent shortly.</p>
+  </div>
+
+  <a href="{% url 'home' %}" class="btn-home"><i class="fas fa-store"></i> Continue Shopping</a>
+</div>
+<script src='https://cdn.jotfor.ms/agent/embedjs/0199d7235cee76fdba1446a31ead2d467540/embed.js'>
+</script>
+
+{% endblock %}

@@ -1,0 +1,103 @@
+{% extends "Glamkart/base.html" %}
+
+{% block content %}
+
+  <meta charset="UTF-8">
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <style>
+    body {
+      background: #f8f9fa;
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      margin-top: 40px;
+    }
+    .search-bar {
+      margin-bottom: 25px;
+    }
+    .card {
+      border-radius: 15px;
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+    }
+    .card img {
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
+      height: 200px;
+      object-fit: cover;
+    }
+    .card-title {
+      font-weight: bold;
+      color: #e91e63;
+    }
+    .btn-add {
+      background-color: #e91e63;
+      color: white;
+      border-radius: 20px;
+      padding: 6px 18px;
+    }
+    .btn-add:hover {
+      background-color: #c2185b;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2 class="text-center mb-4">All Products</h2>
+
+    <!-- 🔎 Search & Filter -->
+    <form method="get" class="row g-2 search-bar">
+      <div class="col-md-4">
+        <input type="text" name="q" class="form-control" placeholder="Search products..." value="{{ request.GET.q }}">
+      </div>
+      <div class="col-md-4">
+        <select name="category" class="form-select">
+          <option value="">All Categories</option>
+          {% for cat in categories %}
+            <option value="{{ cat.id }}" {% if request.GET.category == cat.id|stringformat:"s" %}selected{% endif %}>
+              {{ cat.name }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-4">
+        <button type="submit" class="btn btn-dark w-100">Filter</button>
+      </div>
+    </form>
+
+    <!-- 🛍️ Product Grid -->
+    <div class="row">
+      {% for product in products %}
+      <div class="col-md-3 mb-4">
+        <div class="card">
+          <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+          <div class="card-body">
+            <h5 class="card-title">{{ product.name }}</h5>
+            <p class="card-text">{{ product.description|truncatewords:12 }}</p>
+
+            {% if product.discount_price %}
+              <p>
+                <span class="text-success fw-bold">₹{{ product.discount_price }}</span>
+                <del class="text-muted">₹{{ product.price }}</del>
+              </p>
+            {% else %}
+              <p><span class="fw-bold">₹{{ product.price }}</span></p>
+            {% endif %}
+
+            <a href="{% url 'product_detail' product.slug %}" class="btn btn-outline-dark btn-sm">View</a>
+            <a href="{% url 'add_to_cart' product.id %}" class="btn btn-add btn-sm">Add</a>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <p class="text-center">No products found.</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  {% endblock %}
+

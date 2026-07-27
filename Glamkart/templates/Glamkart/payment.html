@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+  body {
+    background: linear-gradient(135deg, #d0e9e6, #f0f9ff);
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+  }
+  .payment-box {
+    max-width: 650px;
+    margin: 80px auto;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    backdrop-filter: blur(10px);
+    animation: fadeIn 0.8s ease-in-out;
+  }
+  .payment-box h2 {
+    color: #4a9fd6;
+    text-align: center;
+    margin-bottom: 25px;
+    font-weight: 700;
+  }
+  .form-check-label {
+    font-size: 1.05rem;
+    color: #333;
+  }
+  .btn-pay {
+    margin-top: 25px;
+    background-color: #6cb4ee;
+    color: white;
+    border-radius: 30px;
+    padding: 12px 30px;
+    font-size: 1rem;
+    display: block;
+    width: 100%;
+    font-weight: 600;
+    transition: 0.3s;
+  }
+  .btn-pay:hover {
+    background-color: #4a9fd6;
+    transform: scale(1.02);
+  }
+  .summary-box {
+    background: rgba(240, 249, 255, 0.9);
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  }
+  .summary-box h5 {
+    margin-bottom: 12px;
+    color: #4a9fd6;
+    font-weight: 600;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+<div class="payment-box">
+  <h2>Choose Payment Method</h2>
+
+  <!-- Order Summary -->
+  <div class="summary-box">
+    <h5>Order Summary</h5>
+    <p><b>Total Items:</b> {{ order.items.count }}</p>
+    <p><b>Total Price:</b> ₹{{ order.total_price }}</p>
+  </div>
+
+  <!-- Payment Options -->
+  <form method="POST" action="{% url 'payment_success' %}">
+    {% csrf_token %}
+
+    <div class="form-check mb-3">
+      <input class="form-check-input" type="radio" name="payment_method" id="cod" value="cod" checked>
+      <label class="form-check-label" for="cod">
+        Cash on Delivery (COD)
+      </label>
+    </div>
+
+    <div class="form-check mb-3">
+      <input class="form-check-input" type="radio" name="payment_method" id="upi" value="upi">
+      <label class="form-check-label" for="upi">
+        UPI (Google Pay, PhonePe, Paytm)
+      </label>
+    </div>
+
+    <div class="form-check mb-3">
+      <input class="form-check-input" type="radio" name="payment_method" id="card" value="card">
+      <label class="form-check-label" for="card">
+        Credit / Debit Card
+      </label>
+    </div>
+
+    <button type="submit" class="btn btn-pay">Proceed to Pay</button>
+  </form>
+</div>
+<script src='https://cdn.jotfor.ms/agent/embedjs/0199d7235cee76fdba1446a31ead2d467540/embed.js'>
+</script>
+
+{% endblock %}

@@ -1,0 +1,245 @@
+{% extends "Glamkart/base.html" %}
+{% block content %}
+
+<style>
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #d0e9e6, #f0f9ff);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 2rem;
+  }
+
+  .register-card {
+    display: flex;
+    flex-direction: row;
+    max-width: 850px;
+    width: 100%;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    animation: fadeIn 1s ease;
+  }
+
+  .register-left {
+    flex: 1;
+    background: linear-gradient(135deg, #6cb4ee, #95d4f0);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    padding: 1.5rem;
+    text-align: center;
+  }
+
+  .register-left h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+
+  .register-left p {
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.4;
+  }
+
+  .register-left img {
+    width: 200px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .register-right {
+    flex: 1;
+    padding: 1.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .register-right h3 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #3a6ea5;
+    margin-bottom: 1.2rem;
+    text-align: center;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #3a6ea5;
+    margin-bottom: 0.3rem;
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 10px;
+    background: #f0f9ff;
+    outline: none;
+    font-size: 0.9rem;
+    transition: 0.3s;
+  }
+
+  .form-group input:focus {
+    box-shadow: 0 0 6px rgba(108, 180, 238, 0.5);
+    transform: scale(1.02);
+  }
+
+  #photo-preview {
+    display: block;
+    margin-top: 10px;
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #6cb4ee;
+  }
+
+  .btn-register {
+    width: 100%;
+    padding: 0.85rem;
+    margin-top: 0.5rem;
+    border: none;
+    border-radius: 50px;
+    background: linear-gradient(90deg, #6cb4ee, #95d4f0);
+    color: white;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .btn-register:hover {
+    background: linear-gradient(90deg, #4a9edc, #6cb4ee);
+    transform: translateY(-2px);
+  }
+
+  .login-link {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: #3a6ea5;
+  }
+
+  .login-link a {
+    color: #6cb4ee;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.3s;
+  }
+
+  .login-link a:hover {
+    color: #3a6ea5;
+    text-decoration: underline;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  @media (max-width: 768px) {
+    .register-card {
+      flex-direction: column;
+      height: auto;
+    }
+
+    .register-left, .register-right {
+      flex: unset;
+      width: 100%;
+      padding: 1rem 1.5rem;
+    }
+
+    .register-left img {
+      width: 180px;
+    }
+  }
+</style>
+
+<div class="register-card">
+  <div class="register-left">
+    <h2>Welcome to GLAMKART ✨</h2>
+    <p>Join us today and explore exclusive fashion, electronics, and more with amazing offers.</p>
+    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Shopping Illustration">
+  </div>
+
+  <div class="register-right">
+    <h3>Create Account</h3>
+
+    {% if messages %}
+      <ul class="mb-3">
+        {% for message in messages %}
+          <li style="color: {% if message.tags == 'error' %}red{% else %}green{% endif %};">
+            {{ message }}
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" placeholder="Choose a username" required>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" placeholder="example@mail.com" required>
+      </div>
+
+      <div class="form-group">
+        <label for="photo">Upload Profile Photo</label>
+        <input type="file" id="photo" name="photo" accept="image/*" onchange="previewPhoto(event)">
+        <img id="photo-preview" src="https://cdn-icons-png.flaticon.com/512/847/847969.png" alt="Preview">
+      </div>
+
+      <div class="form-group">
+        <label for="password1">Password</label>
+        <input type="password" id="password1" name="password1" placeholder="Enter password" required>
+      </div>
+
+      <div class="form-group">
+        <label for="password2">Confirm Password</label>
+        <input type="password" id="password2" name="password2" placeholder="Re-enter password" required>
+      </div>
+
+      <button type="submit" class="btn-register">Register</button>
+    </form>
+
+    <div class="login-link">
+      Already have an account? <a href="{% url 'login' %}">Login here</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  function previewPhoto(event) {
+    const preview = document.getElementById('photo-preview');
+    preview.src = URL.createObjectURL(event.target.files[0]);
+  }
+</script>
+
+{% endblock %}

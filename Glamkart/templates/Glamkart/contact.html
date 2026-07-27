@@ -1,0 +1,224 @@
+{% extends "Glamkart/base.html" %}
+
+{% block content %}
+
+<style>
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #d0e9e6, #f0f9ff);
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Floating Dots Background */
+  body::before {
+    content: "";
+    position: absolute;
+    width: 150%;
+    height: 150%;
+    background: radial-gradient(circle, rgba(108,180,238,0.15) 2px, transparent 2px);
+    background-size: 50px 50px;
+    animation: moveDots 30s linear infinite;
+    top: -25%;
+    left: -25%;
+    z-index: 0;
+  }
+
+  @keyframes moveDots {
+    0% { transform: translate(0,0); }
+    100% { transform: translate(100px,100px); }
+  }
+
+  .contact-container {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 2rem auto;
+    padding: 2.5rem;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 25px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    backdrop-filter: blur(12px);
+    animation: fadeIn 1.2s ease-in-out;
+  }
+
+  .contact-title {
+    text-align: center;
+    font-size: 2.8rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(90deg, #6cb4ee, #95d4f0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .contact-subtitle {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 2.5rem;
+    line-height: 1.6;
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 2.5rem;
+  }
+
+  .contact-form {
+    padding: 2rem;
+    background: rgba(240, 249, 255, 0.95);
+    border-radius: 20px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .contact-form:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  }
+
+  .contact-form label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+  }
+
+  .contact-form input,
+  .contact-form textarea {
+    width: 100%;
+    padding: 0.8rem;
+    margin-bottom: 1.2rem;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    outline: none;
+    font-size: 0.95rem;
+    transition: 0.3s;
+  }
+
+  .contact-form input:focus,
+  .contact-form textarea:focus {
+    border-color: #6cb4ee;
+    box-shadow: 0 0 8px rgba(108,180,238,0.4);
+  }
+
+  .contact-form button {
+    background: linear-gradient(90deg, #6cb4ee, #95d4f0);
+    color: white;
+    padding: 0.95rem 1.6rem;
+    font-weight: 600;
+    border-radius: 15px;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 1rem;
+    width: 100%;
+  }
+
+  .contact-form button:hover {
+    background: linear-gradient(90deg, #4a9fd6, #6cb4ee);
+    transform: scale(1.05);
+  }
+
+  .contact-info {
+    padding: 1.5rem;
+    background: rgba(240, 249, 255, 0.95);
+    border-radius: 20px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .contact-info:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  }
+
+  .contact-info h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #2c3e50;
+  }
+
+  .contact-info p {
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    color: #555;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .contact-info i {
+    color: #6cb4ee;
+    font-size: 1.2rem;
+  }
+
+  .map-container {
+    margin-top: 1.5rem;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  }
+
+  iframe {
+    width: 100%;
+    height: 250px;
+    border: none;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 768px) {
+    .contact-container { padding: 2rem 1.5rem; }
+  }
+</style>
+
+<form method="POST" action="{% url 'contact' %}">
+    {% csrf_token %}
+
+    <input type="text" name="name" placeholder="Name" required>
+    <input type="email" name="email" placeholder="Email" required>
+    <textarea name="message" placeholder="Message" required></textarea>
+
+    <button type="submit">Submit</button>
+</form>
+
+{% if messages %}
+  {% for message in messages %}
+    <p>{{ message }}</p>
+  {% endfor %}
+{% endif %}
+
+<br>
+
+    <!-- Contact Info -->
+    <div class="contact-info">
+      <h3>Our Office</h3>
+      <p><i class="fas fa-map-marker-alt"></i> <strong>Address:</strong> Hauz khass Glamkart Plaza, New Delhi, India</p>
+      <p><i class="fas fa-envelope"></i> <strong>Email:</strong> Glamkart@myshop.com</p>
+      <p><i class="fas fa-phone"></i> <strong>Phone:</strong> +91 1234567890</p>
+
+      <div class="map-container">
+        <iframe 
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14015.484632495863!2d77.2090214!3d28.6139391!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfd36bda2a8e7%3A0x4bfb68e2a5a8b7e0!2sConnaught%20Place%2C%20New%20Delhi!5e0!3m2!1sen!2sin!4v1694435678901!5m2!1sen!2sin"
+          allowfullscreen=""
+          loading="lazy">
+        </iframe>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FontAwesome CDN for icons -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+<script src='https://cdn.jotfor.ms/agent/embedjs/0199d7235cee76fdba1446a31ead2d467540/embed.js'>
+</script>
+
+{% endblock %}

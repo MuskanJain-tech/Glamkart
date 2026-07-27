@@ -1,0 +1,143 @@
+{% extends "Glamkart/base.html" %}
+
+{% block content %}
+
+  <meta charset="UTF-8">
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <style>
+    body {
+      background: linear-gradient(135deg, #e9f2ff, #f8fbff);
+      font-family: 'Poppins', sans-serif;
+    }
+    .container {
+      margin-top: 40px;
+    }
+
+    /* Header */
+    .search-header {
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    .search-header h3 {
+      color: #0d6efd;
+      font-weight: 700;
+      font-size: 1.8rem;
+    }
+    .search-header p {
+      color: #6c757d;
+    }
+
+    /* Product Card */
+    .card {
+      border-radius: 16px;
+      box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+      background: #ffffff;
+    }
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.12);
+    }
+    .card img {
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
+      height: 220px;
+      object-fit: cover;
+    }
+    .card-body {
+      padding: 1rem 1.2rem;
+    }
+    .card-title {
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: #0d47a1;
+    }
+    .card-text {
+      font-size: 0.9rem;
+      color: #555;
+      min-height: 40px;
+    }
+
+    /* Price */
+    .price {
+      font-size: 1rem;
+      margin-bottom: 8px;
+    }
+    .price .discount {
+      color: #0d6efd;
+      font-weight: bold;
+    }
+    .price del {
+      color: #888;
+      margin-left: 6px;
+      font-size: 0.9rem;
+    }
+
+    /* Buttons */
+    .btn-view {
+      border-radius: 20px;
+      padding: 6px 18px;
+      font-size: 0.85rem;
+    }
+    .btn-add {
+      background-color: #0d6efd;
+      color: white;
+      border-radius: 20px;
+      padding: 6px 18px;
+      font-size: 0.85rem;
+      border: none;
+    }
+    .btn-add:hover {
+      background-color: #0a58ca;
+      color: #fff;
+    }
+  </style>
+
+  <div class="container">
+
+    <!-- 🔎 Search header -->
+    <div class="search-header">
+      {% if query %}
+        <h3>Search Results for "<span class="text-dark">{{ query }}</span>"</h3>
+      {% else %}
+        <h3>Search Results</h3>
+      {% endif %}
+      <p>{{ products.count }} product(s) found</p>
+    </div>
+
+    <!-- 🛍️ Product grid -->
+    <div class="row">
+      {% for product in products %}
+      <div class="col-md-3 mb-4">
+        <div class="card">
+          <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+          <div class="card-body">
+            <h5 class="card-title">{{ product.name }}</h5>
+            <p class="card-text">{{ product.description|truncatewords:12 }}</p>
+
+            <p class="price">
+              {% if product.discount_price %}
+                <span class="discount">₹{{ product.discount_price }}</span>
+                <del>₹{{ product.price }}</del>
+              {% else %}
+                <span class="discount">₹{{ product.price }}</span>
+              {% endif %}
+            </p>
+
+            <a href="{% url 'product_detail' product.slug %}" class="btn btn-outline-primary btn-view">View</a>
+            <a href="{% url 'add_to_cart' product.id %}" class="btn btn-add">Add</a>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12 text-center">
+        <h5 class="text-danger">No products match your search.</h5>
+        <a href="{% url 'product_list' %}" class="btn btn-primary mt-3">Back to Products</a>
+      </div>
+      {% endfor %}
+    </div>
+
+  </div>
+
+{% endblock %}

@@ -1,0 +1,307 @@
+{% extends "Glamkart/base.html" %}
+{% block content %}
+
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #d0e9e6, #f0f9ff);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 80px;
+    overflow-x: hidden;
+  }
+
+  .profile-wrapper {
+    display: flex;
+    gap: 2rem;
+    max-width: 1100px;
+    width: 100%;
+    padding: 0 2rem;
+    animation: fadeIn 1s ease-in-out;
+  }
+
+  .sidebar {
+    width: 220px;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 1rem;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    transition: 0.3s;
+  }
+
+  .sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .sidebar li {
+    padding: 0.7rem 1rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    color: #3a6ea5;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .sidebar li:hover,
+  .sidebar li.active {
+    background: linear-gradient(90deg, #d0e9e6, #f0f9ff);
+    font-weight: 600;
+    transform: translateX(5px);
+  }
+
+  .profile-container {
+    flex: 1;
+    padding: 1.5rem 2rem;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  }
+
+  .profile-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .profile-header h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    background: linear-gradient(90deg, #6cb4ee, #95d4f0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .avatar-container {
+    position: relative;
+    display: inline-block;
+  }
+
+  .avatar {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #6cb4ee;
+    box-shadow: 0 4px 10px rgba(108, 180, 238, 0.4);
+    display: block;
+    margin: 0.8rem auto;
+    transition: 0.4s;
+  }
+
+  .avatar:hover {
+    transform: scale(1.05);
+  }
+
+  .avatar-upload {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: #6cb4ee;
+    color: #fff;
+    padding: 0.3rem 0.45rem;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 0.75rem;
+    border: 2px solid #fff;
+  }
+
+  .loyalty {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #6cb4ee;
+    background: rgba(255, 255, 255, 0.6);
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    display: inline-block;
+    margin-top: 0.5rem;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .btn-update {
+    grid-column: 1 / -1;
+    margin-top: 1rem;
+    padding: 0.9rem;
+    border: none;
+    border-radius: 50px;
+    background: linear-gradient(90deg, #6cb4ee, #95d4f0);
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 12px rgba(108, 180, 238, 0.3);
+  }
+
+  .btn-update:hover {
+    background: linear-gradient(90deg, #4a9edc, #6cb4ee);
+    transform: translateY(-2px);
+  }
+
+  .order-card {
+    background: #f0f9ff;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 0.8rem;
+    box-shadow: 0 4px 10px rgba(108, 180, 238, 0.1);
+  }
+
+  .status {
+    color: green;
+    font-weight: 600;
+  }
+
+  .status.pending {
+    color: orange;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+</style>
+
+<div class="profile-wrapper">
+  <div class="sidebar">
+    <ul>
+      <li class="active" data-target="profile-section">👤 Profile</li>
+      <li data-target="orders-section">🛒 My Orders</li>
+      <li data-target="rewards-section">🎁 Rewards</li>
+      <li data-target="settings-section">⚙️ Settings</li>
+    </ul>
+  </div>
+
+  <div class="profile-container">
+
+    <!-- PROFILE SECTION -->
+<div id="profile-section" class="content-section">
+  <div class="profile-header">
+    <h2>My Profile 👤</h2>
+    <div class="avatar-container">
+      <!-- Display current avatar or placeholder -->
+      <img src="{{ user.profile.avatar.url|default:'https://via.placeholder.com/80' }}" 
+           alt="User Avatar" class="avatar" id="avatarPreview">
+      <!-- Avatar upload input -->
+      <form method="POST" enctype="multipart/form-data" id="avatarForm">
+        {% csrf_token %}
+        <input type="file" name="avatar" id="avatarInput" class="hidden" accept="image/*">
+        <span class="avatar-upload" onclick="document.getElementById('avatarInput').click();">✏️</span>
+      </form>
+    </div>
+    <p>Hello, {{ user.username }}! Update your details below.</p>
+    <p class="loyalty">🌟 Gold Member | {{ user.profile.points|default:'2,450' }} Points</p>
+  </div>
+
+  <!-- Profile Update Form -->
+  <form method="POST" class="profile-form" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-group">
+      <label>First Name</label>
+      <input type="text" name="first_name" value="{{ user.first_name }}" required>
+    </div><br>
+    <div class="form-group">
+      <label>Last Name</label>
+      <input type="text" name="last_name" value="{{ user.last_name }}" required>
+    </div><br>
+    <div class="form-group">
+      <label>Email Address</label>
+      <input type="email" name="email" value="{{ user.email }}" required>
+    </div><br>
+    <div class="form-group">
+      <label>Phone Number</label>
+      <input type="text" name="phone" value="{{ user.profile.phone|default:'' }}" placeholder="+91 9876543210">
+    </div><br>
+    <div class="form-group">
+      <label>Address</label>
+      <input type="text" name="address" value="{{ user.profile.address|default:'' }}" placeholder="Enter your address">
+    </div><br>
+    <div class="form-group">
+      <label>City</label>
+      <input type="text" name="city" value="{{ user.profile.city|default:'' }}" placeholder="Enter city">
+    </div><br>
+    <div class="form-group">
+      <label>Zip Code</label>
+      <input type="text" name="zip" value="{{ user.profile.zip|default:'' }}" placeholder="Enter zip code">
+    </div>
+
+    <button type="submit" class="btn-update">Update Profile</button>
+  </form>
+</div>
+
+<script>
+  // Avatar preview before upload
+  const avatarInput = document.getElementById('avatarInput');
+  const avatarPreview = document.getElementById('avatarPreview');
+
+  avatarInput.addEventListener('change', function() {
+    const file = this.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        avatarPreview.setAttribute('src', e.target.result);
+      }
+      reader.readAsDataURL(file);
+      // Optionally auto-submit avatar form
+      // document.getElementById('avatarForm').submit();
+    }
+  });
+</script>
+
+
+    <!-- ORDERS SECTION -->
+    <div id="orders-section" class="content-section hidden">
+      <h2>🛍️ My Orders</h2>
+      <div class="order-card">
+        <p><strong>Order #12345</strong> - ₹1,299</p>
+        <p>Status: <span class="status">Delivered</span></p>
+      </div>
+      <div class="order-card">
+        <p><strong>Order #12346</strong> - ₹799</p>
+        <p>Status: <span class="status pending">Pending</span></p>
+      </div>
+    </div>
+
+    <!-- REWARDS SECTION -->
+    <div id="rewards-section" class="content-section hidden">
+      <h2>🎁 Rewards</h2>
+      <p>You have <strong>2,450 points</strong>. Redeem them for exciting offers soon!</p>
+      <p style="font-size: 0.9rem; color:#3a6ea5;">More perks are coming soon 💎</p>
+    </div>
+
+    <!-- SETTINGS SECTION -->
+    <div id="settings-section" class="content-section hidden">
+      <h2>⚙️ Settings</h2>
+      <p>Manage your preferences, privacy, and notifications here.</p>
+      <button class="btn-update" style="width:auto;">Change Password</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const menuItems = document.querySelectorAll('.sidebar li');
+  const sections = document.querySelectorAll('.content-section');
+
+  menuItems.forEach(item => {
+    item.addEventListener('click', () => {
+      menuItems.forEach(i => i.classList.remove('active'));
+      sections.forEach(sec => sec.classList.add('hidden'));
+
+      item.classList.add('active');
+      const target = document.getElementById(item.dataset.target);
+      target.classList.remove('hidden');
+    });
+  });
+</script>
+
+{% endblock %}
